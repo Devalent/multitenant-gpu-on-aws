@@ -1,0 +1,3 @@
+name: multitenant-gpu
+runtime: nodejs
+description: Multi-tenant GPU Accelerated AWS Applications
