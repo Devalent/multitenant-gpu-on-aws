@@ -1,10 +1,13 @@
 {
     "name": "multitenant-gpu",
+    "private": true,
     "devDependencies": {
         "@types/node": "^16"
     },
     "dependencies": {
-        "@pulumi/pulumi": "^3.0.0",
-        "@pulumi/aws": "^5.0.0"
+        "@aws-sdk/client-ec2": "^3.57.0",
+        "@aws-sdk/client-ssm": "^3.57.0",
+        "@pulumi/aws": "^5.0.0",
+        "@pulumi/pulumi": "^3.0.0"
     }
 }

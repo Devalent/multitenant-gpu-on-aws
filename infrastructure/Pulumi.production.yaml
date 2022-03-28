@@ -1,2 +1,5 @@
 config:
   aws:region: us-west-2
+  multitenant-gpu:image: artema/multitenant-gpu-on-aws:latest
+  multitenant-gpu:instance: g5.xlarge
+  multitenant-gpu:key: devalent
