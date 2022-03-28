@@ -18,6 +18,7 @@ const region = aws.config.region;
 const name = 'multitenant-gpu';
 const tags: { [x: string]: string; } = { stack: name };
 const tagsList = Object.keys(tags).map(x => ({ key: x, value: tags[x], propagateAtLaunch: true }));
+const port = config.requireNumber('port');
 
 const ec2client = new EC2Client({ region });
 const ssmClient = new SSMClient({ region });
@@ -168,7 +169,7 @@ const task = new aws.ecs.TaskDefinition('ecs-task', {
     portMappings: [
       {
         containerPort: 3000,
-        hostPort: 3000,
+        hostPort: port,
       },
     ],
     environment: [
@@ -177,6 +178,10 @@ const task = new aws.ecs.TaskDefinition('ecs-task', {
         value: 'production',
       },
     ],
+    healthCheck: {
+      command: ['CMD-SHELL', `wget --spider http://localhost:3000/ || exit 1`],
+      startPeriod: 10,
+    },
     // logConfiguration: {
     //   logDriver: 'awslogs',
     //   options: {

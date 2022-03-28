@@ -3,3 +3,4 @@ config:
   multitenant-gpu:image: artema/multitenant-gpu:latest
   multitenant-gpu:instance: g5.xlarge
   multitenant-gpu:key: devalent
+  multitenant-gpu:port: "3000"
