@@ -15,4 +15,9 @@ export const instanceType = config.require('instance_type');
 export const sshKey = config.require('ssh_key');
 export const dockerImage = config.require('docker_image');
 
-export const myIp = axios('https://api.ipify.org?format=json').then(x => x.data['ip']);
+export const myIp = axios('https://api.ipify.org?format=json')
+  .then(x => x.data['ip'])
+  .catch(() => {
+    console.error('Unable to get your IP address.');
+    return '0.0.0.0';
+  });
