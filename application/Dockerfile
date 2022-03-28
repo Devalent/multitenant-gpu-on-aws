@@ -109,8 +109,6 @@ RUN apt-get install -y xvfb fluxbox unclutter
 # Application
 WORKDIR /usr/src/app
 
-RUN npm i -g forever
-
 COPY package.json .
 COPY package-lock.json .
 RUN npm i
@@ -121,10 +119,7 @@ RUN npm run build && rm -rf src
 # RUN rm -rf node_modules && npm ci
 RUN chmod -R o+rwx node_modules/puppeteer/.local-chromium
 
-CMD forever \
-    --spinSleepTime 1000 \
-    --minUptime 1000 \
-    --killSignal=SIGTERM \
-    -o /dev/null \
-    -c "npm start" \
-    .
+ENV NODE_ENV=develop
+ENV PORT=3000
+
+CMD npm start

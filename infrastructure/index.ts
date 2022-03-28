@@ -4,7 +4,10 @@ import {
   DescribeInstanceTypesCommand,
   DescribeKeyPairsCommand,
 } from '@aws-sdk/client-ec2';
-import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
+import {
+  SSMClient,
+  GetParameterCommand,
+} from '@aws-sdk/client-ssm';
 import * as aws from '@pulumi/aws';
 import * as pulumi from '@pulumi/pulumi';
 import * as fs from 'fs';
@@ -18,8 +21,6 @@ const tagsList = Object.keys(tags).map(x => ({ key: x, value: tags[x], propagate
 
 const ec2client = new EC2Client({ region });
 const ssmClient = new SSMClient({ region });
-
-const vpc = aws.ec2.getVpc({ default: true });
 
 const instanceType = config.require('instance');
 const instanceInfo = ec2client
@@ -115,7 +116,9 @@ const launchTemplate = new aws.ec2.LaunchTemplate('ec2-template', {
     arn: instanceProfile.arn,
   },
   keyName: keyPair.then(x => x!),
-  userData: Buffer.from(fs.readFileSync('./userdata.sh')).toString('base64'),
+  userData: Buffer.from(
+    fs.readFileSync('./userdata.sh').toString('utf-8').replace('${name}', name)
+  ).toString('base64'),
 });
 
 const autoscalingGroup = new aws.autoscaling.Group('ec2-autoscaling-group', {
@@ -143,7 +146,6 @@ const capacityProvider = new aws.ecs.CapacityProvider('ecs-capacity', {
   autoScalingGroupProvider: {
     autoScalingGroupArn: autoscalingGroup.arn,
     // managedScaling: {
-      
     // }
   },
 });
@@ -163,26 +165,34 @@ const task = new aws.ecs.TaskDefinition('ecs-task', {
     name: 'worker',
     image: config.require('image'),
     essential: true,
+    portMappings: [
+      {
+        containerPort: 3000,
+        hostPort: 3000,
+      },
+    ],
+    environment: [
+      {
+        name: 'NODE_ENV',
+        value: 'production',
+      },
+    ],
+    // logConfiguration: {
+    //   logDriver: 'awslogs',
+    //   options: {
+    //     "awslogs-group": name,
+    //     "awslogs-region": region,
+    //     "awslogs-create-group": 'true',
+    //   },
+    // },
   }]),
 });
 
-const service = new aws.ecs.Service('ecs-service', {
+new aws.ecs.Service('ecs-service', {
   tags,
   name,
   cluster: cluster.arn,
-  // capacityProviderStrategies: [
-  //   {
-  //     capacityProvider: capacityProvider.name,
-  //     weight: 100,
-  //   },
-  // ],
   taskDefinition: task.arn,
   schedulingStrategy: 'DAEMON',
   forceNewDeployment: true,
-  // placementConstraints: [
-  //   {
-  //     type: 'memberOf',
-  //     expression: pulumi.interpolate`task:group == ${name}`,
-  //   },
-  // ],
 });
