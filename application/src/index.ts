@@ -1,3 +1,5 @@
-const func = async () => {
-  console.log(1);
+const func = () => {
+  console.log('Running...');
 };
+
+setInterval(func, 10 * 1000);

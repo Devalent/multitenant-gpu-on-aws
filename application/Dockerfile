@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.6.0-runtime-ubuntu20.04
+FROM nvidia/cuda:11.6.0-devel-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -8,11 +8,6 @@ RUN apt-get update -y && apt-get install -y wget
 RUN wget --no-verbose -O n https://raw.githubusercontent.com/tj/n/master/bin/n \
     && bash n 16 \
     && rm n
-
-# Chrome
-RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && dpkg -f google-chrome-stable_current_amd64.deb \
-    && rm google-chrome-stable_current_amd64.deb
 
 # FFmpeg
 RUN apt-get update -y && apt-get -y install autoconf automake build-essential libass-dev libtool libssl-dev pkg-config git \
@@ -92,22 +87,44 @@ RUN apt-get update -y && apt-get -y install autoconf automake build-essential li
     && rm -rf ~/ffmpeg_sources
 
 # VirtualGL
-RUN wget https://sourceforge.net/projects/virtualgl/files/2.6.5/virtualgl_2.6.5_amd64.deb/download -O virtualgl_2.6.5_amd64.deb \
-    && dpkg -i virtualgl*.deb \
-    && rm virtualgl*.deb \
+RUN wget --no-verbose -O virtualgl.deb https://sourceforge.net/projects/virtualgl/files/2.6.5/virtualgl_2.6.5_amd64.deb/download \
+    && apt install -y ./virtualgl.deb \
+    && rm virtualgl.deb \
     && /opt/VirtualGL/bin/vglserver_config -config +s +f -t
+
+# Chrome dependencies
+RUN apt-get install -y fonts-liberation gconf-service libappindicator1 libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 \
+    libgbm-dev libgdk-pixbuf2.0-0 libgtk-3-0 libicu-dev libjpeg-dev libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 \
+    libpng-dev libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 \
+    libxrender1 libxss1 libxtst6  xdg-utils
+
+# Chrome
+# RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+#     && apt install -y ./google-chrome-stable_current_amd64.deb \
+#     && rm google-chrome-stable_current_amd64.deb
 
 # Utilities
 RUN apt-get install -y xvfb fluxbox unclutter
-RUN npm i -g forever
 
 # Application
-ADD package.json .
-ADD package-lock.json .
+WORKDIR /usr/src/app
 
+RUN npm i -g forever
+
+COPY package.json .
+COPY package-lock.json .
 RUN npm i
 
 ADD . .
 
-RUN npm run build && rm -rf node_modules src
-RUN npm ci
+RUN npm run build && rm -rf src
+# RUN rm -rf node_modules && npm ci
+RUN chmod -R o+rwx node_modules/puppeteer/.local-chromium
+
+CMD forever \
+    --spinSleepTime 1000 \
+    --minUptime 1000 \
+    --killSignal=SIGTERM \
+    -o /dev/null \
+    -c "npm start" \
+    .
