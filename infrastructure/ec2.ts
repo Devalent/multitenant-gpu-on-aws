@@ -219,6 +219,10 @@ const task = new aws.ecs.TaskDefinition('ecs-task', {
         name: 'NODE_ENV',
         value: 'production',
       },
+      {
+        name: 'NVIDIA_DRIVER_CAPABILITIES',
+        value: 'all',
+      },
     ],
     healthCheck: {
       command: ['CMD-SHELL', `curl http://localhost:3000/ || exit 2`],
