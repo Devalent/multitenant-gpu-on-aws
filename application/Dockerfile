@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y && apt-get install -y curl wget
 
-# FFmpeg
+# FFmpeg, build from source and include NVIDIA codecs
 RUN apt-get update -y && apt-get -y install autoconf automake build-essential libass-dev libtool libssl-dev pkg-config git \
     texinfo zlib1g-dev cmake mercurial libbz2-dev rtmpdump librtmp-dev libunistring2 libunistring-dev opencl-headers ocl-icd-* \
     && mkdir -p /opt/ffmpeg \
