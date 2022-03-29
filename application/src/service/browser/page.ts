@@ -1,5 +1,6 @@
 import * as genericPool from 'generic-pool';
 import puppeteer from 'puppeteer';
+import URI from 'urijs';
 
 import config from '../../config';
 
@@ -113,6 +114,18 @@ export class BrowserProvider {
       width: options.width,
       height: options.height,
     });
+
+    const uri = URI(options.url);
+
+    switch (uri.hostname()) {
+      case 'codepen.io':
+        await page.setCookie({
+          domain: uri.hostname(),
+          name: 'hide_pen_editor_ad',
+          value: 'true',
+        });
+        break;
+    }
 
     await page.goto(options.url, {
       waitUntil: 'networkidle2',
