@@ -49,11 +49,12 @@ const config = {
   },
   "ffmpeg": {
     "recorder": "hevc_nvenc",
-    "timeout": 30,
+    "timeout": 80,
     "format": "mp4",
   },
   "recorder": {
     "concurrency": isDebug ? 1 : 2,
+    "max_duration": 60,
     "max_width": 1920,
     "max_height": 1080,
     "ffmpeg": {

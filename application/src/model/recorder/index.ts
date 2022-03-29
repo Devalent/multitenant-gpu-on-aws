@@ -52,10 +52,15 @@ export const runBenchmark = async () => {
   });
 };
 
-export const recordUrl = async (url:string) => {
-  const width = 1280;
-  const height = 720;
-  const duration = 10;
+export type RecordOptions = {
+  url:string;
+  width:number;
+  height:number;
+  duration:number;
+};
+
+export const recordUrl = async (opts:RecordOptions) => {
+  const { url, width, height, duration } = opts;
 
   return await browser.runPage({ url, width, height }, async ({ page, display }) => {
     if (!display) {

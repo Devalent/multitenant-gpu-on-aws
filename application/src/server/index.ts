@@ -35,6 +35,9 @@ export const startWebServer = async ():Promise<void> => {
 
   app.get('/record', async (req, res) => {
     const url = req.query['url'] as string;
+    const duration = parseInt(req.query['duration'] as string, 10) || 10;
+    const width = parseInt(req.query['width'] as string, 10) || 1280;
+    const height = parseInt(req.query['height'] as string, 10) || 720;
 
     if (!url) {
       res.status(400).send('URL is not provided.');
@@ -58,7 +61,27 @@ export const startWebServer = async ():Promise<void> => {
       return;
     }
 
-    const recording = await recorder.recordUrl(url);
+    if (!duration || duration > config.recorder.max_duration) {
+      res.status(400).send('Invalid duration.');
+      return;
+    }
+
+    if (!width || width > config.recorder.max_width) {
+      res.status(400).send('Invalid width.');
+      return;
+    }
+
+    if (!height || height > config.recorder.max_height) {
+      res.status(400).send('Invalid height.');
+      return;
+    }
+
+    const recording = await recorder.recordUrl({
+      url,
+      duration,
+      width,
+      height,
+    });
     const filename = `${nanoid()}.${config.ffmpeg.format}`;
 
     res.setHeader('content-disposition', `attachment; filename="${filename}"`);

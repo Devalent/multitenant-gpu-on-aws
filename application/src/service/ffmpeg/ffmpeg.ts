@@ -88,7 +88,7 @@ export class FfmpegProcess extends EventEmitter {
     }
   }
 
-  public async stop(wait:boolean = false):Promise<any> {
+  public async stop():Promise<any> {
     if (this.ended) {
       if (this.error) {
         throw this.error;
@@ -101,7 +101,7 @@ export class FfmpegProcess extends EventEmitter {
 
     try {
       const timeoutTask = new Promise((resolve) => {
-        timeoutId = setTimeout(resolve, (wait ? config.ffmpeg.timeout : 20) * 1000);
+        timeoutId = setTimeout(resolve, config.ffmpeg.timeout * 1000);
       })
         .then(async () => { throw new Error('Process timeout.'); });
 
@@ -110,9 +110,7 @@ export class FfmpegProcess extends EventEmitter {
         new Promise(resolve => this.once('ended', resolve)),
       ]);
 
-      if (!wait) {
-        this.process!.stdin.write('q');
-      }
+      this.process!.stdin.write('q');
 
       await task;
     } catch (error) {
