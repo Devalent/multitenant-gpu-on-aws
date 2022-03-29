@@ -8,7 +8,7 @@
     "start": "node .",
     "build": "tsc --outDir dist",
     "docker": "zx ./docker.mjs",
-    "deploy": "zx ./deploy.mjs"
+    "deploy": "DOCKER_IMAGE=artema/multitenant-gpu:latest zx ./deploy.mjs"
   },
   "engines": {
     "node": "16"

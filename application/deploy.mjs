@@ -1,9 +1,13 @@
 #!/usr/bin/env zx
 
-const repository = 'artema';
-const image = 'multitenant-gpu';
-const tag = 'latest';
-const fullName = `${repository}/${image}:${tag}`;
+const fullName = process.env.DOCKER_IMAGE;
+
+if (!fullName) {
+  throw `DOCKER_IMAGE variable is not set.`;
+}
+
+const [repository, imageAndTag] = fullName.split('/');
+const [image, tag] = imageAndTag.split(':');
 
 await $`docker pull ${fullName} || true`;
 await $`docker build --platform linux/amd64 --cache-from ${fullName} -t ${image} .`;

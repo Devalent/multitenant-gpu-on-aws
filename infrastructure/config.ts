@@ -12,7 +12,7 @@ export const tagsList = Object.keys(tags).map(x => ({ key: x, value: tags[x], pr
 
 export const webPort = config.requireNumber('web_port');
 export const instanceType = config.require('instance_type');
-export const sshKey = config.require('ssh_key');
+export const sshKey = config.get('ssh_key');
 export const dockerImage = config.require('docker_image');
 export const dockerUser = config.get('docker_user');
 export const dockerToken = config.get('docker_token');
