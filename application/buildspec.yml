@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - cd $CODEBUILD_SRC_DIR/application
+      - ADBLOCK=true NODE_ENV= npm i
+  build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR/application
+      - npm run deploy

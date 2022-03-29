@@ -1,7 +1,7 @@
 #!/usr/bin/env zx
 
 import 'zx/globals';
-import { echo } from 'zx/experimental'
+import { echo } from 'zx/experimental';
 
 const region = process.env.AWS_REGION;
 

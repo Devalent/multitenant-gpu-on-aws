@@ -1,13 +1,8 @@
-FROM nvidia/cuda:11.6.0-devel-ubuntu20.04
+FROM nvidia/cuda:11.4.0-devel-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update -y && apt-get install -y wget
-
-# Node.js
-RUN wget --no-verbose -O n https://raw.githubusercontent.com/tj/n/master/bin/n \
-    && bash n 16 \
-    && rm n
+RUN apt-get update -y && apt-get install -y curl wget
 
 # FFmpeg
 RUN apt-get update -y && apt-get -y install autoconf automake build-essential libass-dev libtool libssl-dev pkg-config git \
@@ -17,6 +12,7 @@ RUN apt-get update -y && apt-get -y install autoconf automake build-essential li
     && cd ~/ffmpeg_sources \
     && git clone https://github.com/FFmpeg/nv-codec-headers \
     && cd nv-codec-headers \
+    && git checkout origin/sdk/11.0 \
     && make \
     && make install PREFIX="/opt/ffmpeg_build" \
     && cd ~/ffmpeg_sources \
@@ -96,7 +92,7 @@ RUN wget --no-verbose -O virtualgl.deb https://sourceforge.net/projects/virtualg
 RUN apt-get install -y fonts-liberation gconf-service libappindicator1 libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 \
     libgbm-dev libgdk-pixbuf2.0-0 libgtk-3-0 libicu-dev libjpeg-dev libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 \
     libpng-dev libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 \
-    libxrender1 libxss1 libxtst6  xdg-utils
+    libxrender1 libxss1 libxtst6 xdg-utils
 
 # Chrome
 # RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
@@ -105,6 +101,11 @@ RUN apt-get install -y fonts-liberation gconf-service libappindicator1 libasound
 
 # Utilities
 RUN apt-get install -y xvfb fluxbox unclutter
+
+# Node.js
+RUN wget --no-verbose -O n https://raw.githubusercontent.com/tj/n/master/bin/n \
+    && bash n 16 \
+    && rm n
 
 # Application
 WORKDIR /usr/src/app
