@@ -47,10 +47,23 @@ const config = {
       "--enable-automation",
     ],
   },
+  "ffmpeg": {
+    "recorder": "hevc_nvenc",
+    "timeout": 30,
+    "format": "mp4",
+  },
   "recorder": {
     "concurrency": isDebug ? 1 : 2,
     "max_width": 1920,
     "max_height": 1080,
+    "ffmpeg": {
+      "in": "-hwaccel nvdec -hwaccel_output_format cuda -thread_queue_size 2048 -probesize 10M -analyzeduration 10M -framerate 30",
+      "out": "-c:v hevc_nvenc -preset fast -movflags +faststart -g 999999",
+    },
+    "ffmpeg_debug": {
+      "in": "-thread_queue_size 2048 -probesize 10M -analyzeduration 10M -framerate 30",
+      "out": "-c:v x264 -preset fast -movflags +faststart -g 999999",
+    },
   },
 };
 

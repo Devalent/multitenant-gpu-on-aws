@@ -7,7 +7,6 @@
   "scripts": {
     "start": "node .",
     "build": "tsc --outDir dist",
-    "dev": "ts-node ./src",
     "docker": "zx ./docker.mjs",
     "deploy": "zx ./deploy.mjs"
   },
@@ -20,6 +19,7 @@
     "@types/generic-pool": "^3.1.10",
     "@types/node": "^16",
     "@types/temp": "^0.9.1",
+    "@types/urijs": "^1.19.19",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3",
     "zx": "^6.0.7"
@@ -31,6 +31,7 @@
     "generic-pool": "^3.8.2",
     "pino": "^7.9.2",
     "puppeteer": "^13.5.1",
-    "temp": "^0.9.4"
+    "temp": "^0.9.4",
+    "urijs": "^1.19.10"
   }
 }

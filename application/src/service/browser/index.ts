@@ -14,13 +14,13 @@ export { BrowserPage, IBrowserOptions } from './page';
 let displayPool:DisplayPool | undefined | null;
 let browserPool:BrowserPool | undefined;
 
-export const runPage = async (
+export const runPage = async <T = any>(
   options:IBrowserOptions,
   handler:(providers:{
     page:BrowserPage;
     display?:string;
-  }) => Promise<any>,
-):Promise<void> => {
+  }) => Promise<T>,
+):Promise<T> => {
   if (!browserPool) {
     throw new Error('Not initialized.');
   }
@@ -32,7 +32,7 @@ export const runPage = async (
       const page = await provider.getPage(options);
       const { display } = provider;
 
-      await handler({
+      return await handler({
         page,
         display,
       });

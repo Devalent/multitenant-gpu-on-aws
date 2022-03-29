@@ -1,67 +1,65 @@
-import * as Bluebird from 'bluebird';
 import * as express from 'express';
-import * as temp from 'temp';
+import URI from 'urijs';
 
 import config from '../config';
-import * as browser from '../service/browser';
+
+import * as recorder from '../model/recorder';
+
 import logger from '../service/logger';
-import resource from '../service/resource';
 
 export const startWebServer = async ():Promise<void> => {
   const app = express.default();
 
   app.get('/', (req, res) => res.send('Server is running.'));
 
-  app.get('/gpu', (req, res) => {
-    browser.runPage({
-      width: 1280,
-      height: 720,
-      url: 'chrome://gpu',
-    }, async ({ page }) => {
-      const html = await page.content();
+  app.get('/gpu', async (req, res) => {
+    try {
+      const html = await recorder.runGpuTest();
 
       res.status(200).send(html);
-    })
-      .catch((error) => res.status(500).send(error));
+    } catch (error) {
+      res.status(500).send(error);
+    }
   });
 
-  app.get('/benchmark', (req, res) => {
-    browser.runPage({
-      width: 1920,
-      height: 1080,
-      url: 'https://web.basemark.com/',
-    }, async ({ page }) => {
-      await page.click('#start');
-
-      let timeout;
-
-      try {
-        await Bluebird.race([
-          new Promise((resolve) => {
-            timeout = setInterval(async () => {
-              if (page.url().startsWith('https://web.basemark.com/result')) {
-                resolve(undefined);
-              }
-            }, 1000);
-          }),
-          resource.createTimeout(5 * 60 * 1000, 'benchmark').run(),
-        ]);
-      } finally {
-        clearTimeout(timeout);
-      }
-
-      const screenshot = temp.path({ suffix: '.jpeg' });
-
-      await page.screenshot({
-        path: screenshot,
-        fullPage: true,
-        type: 'jpeg',
-        quality: 30,
-      });
+  app.get('/benchmark', async (req, res) => {
+    try {
+      const screenshot = await recorder.runBenchmark();
 
       res.sendFile(screenshot);
-    })
-      .catch((error) => res.status(500).send(error));
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  });
+
+  app.get('/record', async (req, res) => {
+    const url = req.query['url'] as string;
+
+    if (!url) {
+      res.status(400).send('URL is not provided.');
+      return;
+    }
+
+    const uri = URI(url);
+
+    if (!uri.is('absolute') || !uri.is('url') || !uri.is('domain')) {
+      res.status(400).send('Unsupported URL format.');
+      return;
+    }
+
+    if (uri.protocol() !== 'http' && uri.protocol() !== 'https') {
+      res.status(400).send('Unsupported URL protocol.');
+      return;
+    }
+
+    if (uri.hostname() === 'localhost' || uri.hostname().includes('amazon')) {
+      res.status(400).send('Unsupported URL domain.');
+      return;
+    }
+
+    const recording = await recorder.recordUrl(url);
+
+    res.sendFile(recording);
   });
 
   await new Promise((resolve, reject) => {

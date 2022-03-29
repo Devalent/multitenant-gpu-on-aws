@@ -89,9 +89,9 @@ class DisplayProvider {
 }
 
 export const initDisplays = async ():Promise<DisplayPool | null> => {
-  if (config.is_debug) {
-    return null;
-  }
+  // if (config.is_debug) {
+  //   return null;
+  // }
 
   const displayProviderPool = genericPool.createPool<DisplayProvider>({
     create: async () => {
