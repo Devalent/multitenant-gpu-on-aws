@@ -221,7 +221,7 @@ const task = new aws.ecs.TaskDefinition('ecs-task', {
       },
     ],
     healthCheck: {
-      command: ['CMD-SHELL', `curl http://localhost:3000/ || exit 1`],
+      command: ['CMD-SHELL', `curl http://localhost:3000/ || exit 2`],
       startPeriod: 10,
     },
     resourceRequirements: [

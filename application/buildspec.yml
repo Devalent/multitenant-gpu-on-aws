@@ -6,7 +6,7 @@ phases:
       nodejs: 14
     commands:
       - cd $CODEBUILD_SRC_DIR/application
-      - ADBLOCK=true NODE_ENV= npm i zx
+      - npm i -g zx
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR/application

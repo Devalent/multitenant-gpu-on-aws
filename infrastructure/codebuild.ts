@@ -15,6 +15,14 @@ type CodeBuildOptions = {
 };
 
 if (useCi) {
+  if (!dockerUser) {
+    throw `Pulumi config variable "docker_user" is required for CI.`;
+  }
+
+  if (!dockerToken) {
+    throw `Pulumi config variable "docker_token" is required for CI.`;
+  }
+
   const repository = new aws.codecommit.Repository('git-repository', {
     tags,
     repositoryName: name,
