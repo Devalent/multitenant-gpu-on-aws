@@ -14,8 +14,9 @@ export const webPort = config.requireNumber('web_port');
 export const instanceType = config.require('instance_type');
 export const sshKey = config.require('ssh_key');
 export const dockerImage = config.require('docker_image');
-export const dockerUser = config.require('docker_user');
-export const dockerToken = config.require('docker_token');
+export const dockerUser = config.get('docker_user');
+export const dockerToken = config.get('docker_token');
+export const useCi = !!config.getBoolean('ci');
 
 export const myIp = axios('https://api.ipify.org?format=json')
   .then(x => x.data['ip'])

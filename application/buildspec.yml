@@ -10,4 +10,5 @@ phases:
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR/application
+      - docker login --username $DOCKER_USER --password $DOCKER_TOKEN
       - npm run deploy
