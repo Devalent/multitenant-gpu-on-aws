@@ -29,6 +29,7 @@
     "execa": "^5.1.1",
     "express": "^4.17.3",
     "generic-pool": "^3.8.2",
+    "nanoid": "^3.3.2",
     "pino": "^7.9.2",
     "puppeteer": "^13.5.1",
     "temp": "^0.9.4",

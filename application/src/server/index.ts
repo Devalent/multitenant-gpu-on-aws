@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { nanoid } from 'nanoid';
 import URI from 'urijs';
 
 import config from '../config';
@@ -58,7 +59,9 @@ export const startWebServer = async ():Promise<void> => {
     }
 
     const recording = await recorder.recordUrl(url);
+    const filename = `${nanoid()}.${config.ffmpeg.format}`;
 
+    res.setHeader('content-disposition', `attachment; filename="${filename}"`);
     res.sendFile(recording);
   });
 
