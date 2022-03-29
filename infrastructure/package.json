@@ -5,10 +5,11 @@
     "deploy": "pulumi up",
     "up": "AWS_REGION=us-west-2 aws autoscaling set-desired-capacity --auto-scaling-group-name multitenant-gpu --desired-capacity 1",
     "down": "AWS_REGION=us-west-2 aws autoscaling set-desired-capacity --auto-scaling-group-name multitenant-gpu --desired-capacity 0",
-    "ip": "AWS_REGION=us-west-2 SG_NAME=multitenant-gpu bash -e ip.sh"
+    "ip": "AWS_REGION=us-west-2 SG_NAME=multitenant-gpu zx ./ip.mjs"
   },
   "devDependencies": {
-    "@types/node": "^16"
+    "@types/node": "^16",
+    "zx": "^6.0.7"
   },
   "dependencies": {
     "@aws-sdk/client-ec2": "^3.57.0",
