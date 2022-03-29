@@ -134,7 +134,7 @@ export class Xvfb {
     }
   }
 
-  display() {
+  display():string {
     if (!this._display) {
       var displayNum = 98;
       var lockFile;

@@ -48,37 +48,34 @@ export class DisplayResource {
 
 class DisplayProvider {
   public async create():Promise<DisplayResource> {
-    const item = await new Promise<any>((resolve, reject) => {
+    // Start the display server
+    const item = await new Promise<Xvfb>((resolve, reject) => {
       const xvfb = new Xvfb({
         reuse: false,
         xvfb_args: [
           '-screen', '0', `${config.recorder.max_width}x${config.recorder.max_height}x24+32`,
+          '+extension', 'GLX', // Enable OpenGL
           '+extension', 'RANDR',
-          '+extension', 'GLX',
-          '-nolisten', 'tcp',
-          '-dpi', '96',
-          '-ac',
-          '-noreset',
+          '-nolisten', 'tcp', '-dpi', '96', '-ac', '-noreset',
         ],
       });
       xvfb.start((error) => {
         if (error) {
           reject(error);
-          return;
+        } else {
+          resolve(xvfb);
         }
-
-        resolve(xvfb);
       });
     });
-    const display:string = item.display();
+    const display = item.display(); // Get the display number, e.g. ":99"
 
+    // Start the window manager
     const wm = execa('fluxbox', [], {
-      env: { DISPLAY: display },
+      env: { DISPLAY: display }, // Run on the new display
     });
 
-    const cursor = execa('unclutter', [
-      '-idle', '0',
-    ], {
+    // Hide the cursor
+    const cursor = execa('unclutter', ['-idle', '0'], {
       env: { DISPLAY: display },
     });
 
