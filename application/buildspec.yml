@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 16
+      nodejs: 14
     commands:
       - cd $CODEBUILD_SRC_DIR/application
       - ADBLOCK=true NODE_ENV= npm i
