@@ -1,10 +1,9 @@
 config:
   aws:region: us-west-2
-  multitenant-gpu:ci: true
+  multitenant-gpu:ci: false
   multitenant-gpu:docker_image: artema/multitenant-gpu:latest
-  multitenant-gpu:docker_token:
-    secure: AAABAJE2jXtHJIVzYYL+d++buzV0LbyqWOZ4dCXNw5t/44rK7O9jNArs40Iz2lK/dr+B/ZthpFWGoi7BctzuGpGg9rA=
-  multitenant-gpu:docker_user: artema
   multitenant-gpu:instance_type: g5.xlarge
-  multitenant-gpu:ssh_key: devalent
   multitenant-gpu:web_port: 80
+  # multitenant-gpu:ssh_key: root
+  # multitenant-gpu:docker_token:
+  # multitenant-gpu:docker_user:
