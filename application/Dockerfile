@@ -5,11 +5,15 @@ FROM nvidia/cuda:11.4.0-devel-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
+# Mount all driver libraries
+# https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/user-guide.html#driver-capabilities
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 ENV PORT=3000
 ENV NODE_ENV=develop
 
 RUN apt-get update -y && apt-get install -y curl wget
+
+RUN mkdir -p ~/install
 
 # FFmpeg, build from source and include NVIDIA codecs
 COPY ./install/ffmpeg.sh ~/install/ffmpeg.sh
@@ -30,6 +34,8 @@ RUN bash -e ~/install/utils.sh
 # Node.js
 COPY ./install/node.sh ~/install/node.sh
 RUN bash -e ~/install/node.sh
+
+RUN rm -rf ~/install
 
 # Application
 WORKDIR /usr/src/app
