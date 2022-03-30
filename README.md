@@ -17,7 +17,7 @@ Reference implementation of a multi-tenant GPU-accelerated application, packaged
 
 ### [application](./application)
 
-Dockerized Node.js application. Can run on any platform, but is intended to work properly on Linux with NVIDIA drivers (455.28 or newer) installed and accessible from within Docker.
+Dockerized Node.js application. Can run on any platform, but is intended to work properly on Linux with NVIDIA drivers (455.28 or newer) installed and accessible from within Docker. The Docker image build can take up to an hour for the first time.
 
 npm commands:
 
@@ -28,7 +28,7 @@ Provides the following APIs:
 
 * `http://$IP/gpu` - prints the Chrome GPU report;
 * `http://$IP/benchmark` - runs the [Basemark](https://web.basemark.com/) benchmark and prints the results (can take several minutes to complete);
-* `http://$IP/record?duration=60&width=1920&height=1080&url=$URL` - recordd a video of the webpage.
+* `http://$IP/record?duration=60&width=1920&height=1080&url=$URL` - record a video of the webpage.
 
 ### [infrastructure](./infrastructure)
 
