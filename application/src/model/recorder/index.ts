@@ -33,7 +33,7 @@ export const runBenchmark = async () => {
             }
           }, 1000);
         }),
-        resource.createTimeout(5 * 60 * 1000, 'benchmark').run(),
+        resource.createTimeout(10 * 60 * 1000, 'benchmark').run(),
       ]);
     } finally {
       clearTimeout(timeout);
@@ -45,7 +45,7 @@ export const runBenchmark = async () => {
       path: screenshot,
       fullPage: true,
       type: 'jpeg',
-      quality: 30,
+      quality: 80,
     });
 
     return screenshot;
