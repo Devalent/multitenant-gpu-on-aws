@@ -5,6 +5,6 @@ apt-get install -y fonts-liberation gconf-service libappindicator1 libasound2 li
     libpng-dev libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 \
     libxrender1 libxss1 libxtst6 xdg-utils
 
-# wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-#     && apt install -y ./google-chrome-stable_current_amd64.deb \
-#     && rm google-chrome-stable_current_amd64.deb
+# wget -q -O ~/chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+#     && apt install -y ~/chrome.deb \
+#     && rm ~/chrome.deb
