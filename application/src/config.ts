@@ -15,6 +15,7 @@ const config = {
       "--disable-infobars",
       "--no-default-browser-check",
       "--use-gl=desktop",
+      "--enable-features=VaapiVideoDecoder",
       "--ignore-gpu-blacklist",
       "--ignore-gpu-blocklist",
       "--enable-gpu-rasterization",
