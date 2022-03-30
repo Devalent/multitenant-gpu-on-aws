@@ -49,6 +49,8 @@ export class DisplayResource {
 class DisplayProvider {
   public async create():Promise<DisplayResource> {
     // Start the display server
+    // https://en.wikipedia.org/wiki/Xvfb
+    // https://en.wikipedia.org/wiki/VirtualGL
     const item = await new Promise<Xvfb>((resolve, reject) => {
       const xvfb = new Xvfb({
         reuse: false,
@@ -70,11 +72,13 @@ class DisplayProvider {
     const display = item.display(); // Get the display number, e.g. ":99"
 
     // Start the window manager
+    // https://en.wikipedia.org/wiki/Fluxbox
     const wm = execa('fluxbox', [], {
       env: { DISPLAY: display }, // Run on the new display
     });
 
     // Hide the cursor
+    // http://manpages.ubuntu.com/manpages/trusty/man1/unclutter.1.html
     const cursor = execa('unclutter', ['-idle', '0'], {
       env: { DISPLAY: display },
     });
