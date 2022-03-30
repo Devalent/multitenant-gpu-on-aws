@@ -17,7 +17,7 @@ Reference implementation of a multi-tenant GPU-accelerated application, packaged
 
 ### [application](./application)
 
-Dockerized Node.js application. Can run on any platform, but is intended to work properly on Linux with NVIDIA drivers (455.28 or newer) installed and accessible from within Docker. The Docker image build can take up to an hour for the first time.
+Dockerized Node.js application. Can run on any platform, but is intended to work properly on Linux with NVIDIA drivers (455.28 or newer) installed and accessible from within Docker. The Docker image build can take up to an hour for the first time. Pre-built image is available at [Docker Hub](https://hub.docker.com/r/artema/multitenant-gpu).
 
 npm commands:
 
