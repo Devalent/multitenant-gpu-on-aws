@@ -43,7 +43,7 @@ apt-get update -y && apt-get -y install autoconf automake build-essential libass
     && make -j$(nproc) distclean \
     && echo /opt/ffmpeg_build/lib > /etc/ld.so.conf.d/ffmpeg.conf \
     && ldconfig -vvvv \
-    && cd ~/ffmpeg_sources \ 
+    && cd ~/ffmpeg_sources \
     && git clone https://github.com/FFmpeg/FFmpeg -b master \
     && cd FFmpeg \
     && PATH="/opt/ffmpeg/bin:$PATH" PKG_CONFIG_PATH="/opt/ffmpeg_build/lib/pkgconfig" ./configure \
