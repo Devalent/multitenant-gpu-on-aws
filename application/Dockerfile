@@ -13,25 +13,30 @@ ENV NODE_ENV=develop
 
 RUN apt-get update -y && apt-get install -y curl wget
 
+RUN mkdir /install
+WORKDIR /install
+
 # FFmpeg, build from source and include NVIDIA codecs
 COPY ./install/ffmpeg.sh .
-RUN bash -e ~/ffmpeg.sh
+# RUN bash -e ~/ffmpeg.sh
 
 # VirtualGL
 COPY ./install/virtualgl.sh .
-RUN bash -e ~/virtualgl.sh
+RUN bash -e virtualgl.sh
 
 # Chrome dependencies
 COPY ./install/chrome.sh .
-RUN bash -e ~/chrome.sh
+RUN bash -e chrome.sh
 
 # Utilities
 COPY ./install/utils.sh .
-RUN bash -e ~/utils.sh
+RUN bash -e utils.sh
 
 # Node.js
 COPY ./install/node.sh .
-RUN bash -e ~/node.sh
+RUN bash -e node.sh
+
+RUN rm -rf /install
 
 # Application
 WORKDIR /usr/src/app
