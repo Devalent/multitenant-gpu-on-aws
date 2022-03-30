@@ -51,3 +51,7 @@ pulumi config set docker_image mydockerhubuser/myrepository:latest
 ```
 
 `ssh_key` is the name of EC2 Key Pair that will be assigned to your instances for SSH access. EC2 security group will automatically limit the access to port 22 to your current IP address at the time of deployment.
+
+```
+pulumi config set ssh_key mykeyname
+```
