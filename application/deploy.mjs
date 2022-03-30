@@ -10,6 +10,6 @@ const [repository, imageAndTag] = fullName.split('/');
 const [image, tag] = imageAndTag.split(':');
 
 await $`docker pull ${fullName} || true`;
-await $`docker build --platform linux/amd64 -t ${image} .`; // --cache-from ${fullName}
+await $`docker build --platform linux/amd64 --cache-from ${fullName} -t ${image} .`;
 await $`docker tag ${image} ${fullName}`;
 await $`docker push ${fullName}`;
