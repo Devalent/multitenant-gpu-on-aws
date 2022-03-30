@@ -18,7 +18,7 @@ WORKDIR /install
 
 # FFmpeg, build from source and include NVIDIA codecs
 COPY ./install/ffmpeg.sh .
-# RUN bash -e ~/ffmpeg.sh
+RUN bash -e ffmpeg.sh
 
 # VirtualGL
 COPY ./install/virtualgl.sh .
